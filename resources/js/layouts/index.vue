@@ -9,6 +9,7 @@
 
 import home_layout from './home/app.vue';
 import error_layout from './error/app.vue';
+import auth_layout from './auth/app.vue';
 
 export default { 
   computed: {
@@ -17,6 +18,7 @@ export default {
       return {
         'home-layout': home_layout,
         'error-layout': error_layout,
+        'auth-layout': auth_layout,
       }[layout];
     },
   }
