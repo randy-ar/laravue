@@ -63,6 +63,30 @@ var mixin = {
         scrollTop: 0
       }, "300");
     },
+    logout() {
+      Swal.fire({
+        icon: "question",
+        title: "Apakah anda yakin ingin keluar?",
+        text: "Anda akan keluar dari aplikasi",
+        showConfirmButton: true,
+        showCancelButton: true,
+      })
+      .then(result => {
+        if(result.value){
+          axios.post('/api/logout')
+          .then(res => res.data)
+          .then(res => {
+            axios.post('/api/delete-cookie')
+            .then(res => res.data)
+            .then(res => {
+              this.set_session(res);
+              this.$store.commit('clear_cookie');
+              router.push({name: 'home.index'});
+            }).catch(err => this.alert(err));
+          }).catch(err => this.alert(err));
+        }
+      }).catch(err => this.alert(err));
+    }
   }
 }
 

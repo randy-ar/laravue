@@ -8,7 +8,11 @@
   <div>
     <nav class="navbar fixed-top navbar-expand-lg bg-dark navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="/">Laravue</a>
+        <a class="navbar-brand" href="/">
+          Laravue
+          <!-- {{ is_login }} -->
+          <!-- debug state here ^ -->
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -51,53 +55,12 @@
 
 <script>
 
-import Swal from 'sweetalert2'
-import router from '@/routes/index.js';
-
 export default {
-  data() {
-    return {
-      is_login: false
+  computed: {
+    is_login(){
+      return this.$store.getters.get_is_login;
     }
   },
-  created() {
-    console.log({
-      "is_login": this.is_login,
-      "get_token": this.get_token
-    });
-    this.cek_login();
-  },
-  methods: {
-    cek_login() {
-      this.is_login = this.$store.getters.get_cookie("token") != undefined;
-    },
-    logout() {
-      Swal.fire({
-        icon: "question",
-        title: "Apakah anda yakin ingin keluar?",
-        text: "Anda akan keluar dari aplikasi",
-        showConfirmButton: true,
-        showCancelButton: true,
-      })
-      .then(result => {
-        if(result.value){
-          axios.post('/api/logout')
-          .then(res => res.data)
-          .then(res => {
-            axios.post('/api/delete-cookie')
-            .then(res => res.data)
-            .then(res => {
-              this.set_session(res);
-              document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-              document.cookie = "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-              router.push({name: 'home.index'});
-              this.cek_login();
-            }).catch(err => this.alert(err));
-          }).catch(err => this.alert(err));
-        }
-      }).catch(err => this.alert(err));
-    }
-  }
 }
 
 </script>
